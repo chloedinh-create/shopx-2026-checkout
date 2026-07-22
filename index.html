@@ -185,6 +185,8 @@
   .invoice-toggle .d{color:var(--sub);font-size:12px;margin-top:2px}
   #invoiceFields{display:none;margin-bottom:6px}
   #invoiceFields.show{display:block}
+  #invoiceBankNote{display:none;margin-top:0;margin-bottom:14px}
+  #invoiceBankNote.show{display:flex}
 
   footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-size:12px;
     padding:24px var(--gutter) 40px}
@@ -252,7 +254,7 @@
       <div class="method on" data-method="paypal">
         <span class="radio"></span>
         <svg viewBox="0 0 24 24" fill="none"><path d="M7 21l1.5-9M9 12h4a4 4 0 0 0 0-8H8L6 17"/><path d="M11 17h3a4 4 0 0 0 0-8"/></svg>
-        <span class="ml">PayPal</span>
+        <span class="ml">PayPal/Card</span>
       </div>
       <div class="method" data-method="bank">
         <span class="radio"></span>
@@ -329,9 +331,14 @@
       <input type="checkbox" id="wantInvoice">
       <span>
         <span class="t">Request VAT invoice (+8%)</span>
-        <span class="d">Tick this if you need a VAT invoice. 8% VAT will be added to the total.</span>
+        <span class="d">Available for Bank transfer only. 8% VAT will be added to the total.</span>
       </span>
     </label>
+
+    <div class="note" id="invoiceBankNote">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <div class="nt"><b>VAT invoices require Bank transfer.</b> Please switch your payment method to <b>Bank transfer</b> above to complete this order with an invoice.</div>
+    </div>
 
     <div id="invoiceFields">
       <div class="field"><label>Company name <span class="req">*</span></label>
@@ -467,6 +474,11 @@
     document.getElementById("panelPaypal").classList.toggle("show",m==="paypal");
     document.getElementById("panelBank").classList.toggle("show",m==="bank");
     document.getElementById("panelAlipay").classList.toggle("show",m==="alipay");
+    updateInvoiceWarn();
+  }
+
+  function updateInvoiceWarn(){
+    document.getElementById("invoiceBankNote").classList.toggle("show", wantInvoice && method!=="bank");
   }
   document.querySelectorAll(".method").forEach(el=>{
     el.addEventListener("click",()=>setMethod(el.dataset.method));
@@ -492,6 +504,7 @@
   document.getElementById("wantInvoice").addEventListener("change", e=>{
     wantInvoice = e.target.checked;
     document.getElementById("invoiceFields").classList.toggle("show", wantInvoice);
+    updateInvoiceWarn();
     renderSummary();
   });
 
@@ -505,7 +518,8 @@
   document.getElementById("payBtn").addEventListener("click", ()=>{
     const total = TICKETS.filter(t=>t.qty>0).reduce((s,t)=>s+t.price*t.qty,0);
     if(total<=0){ alert("Please select at least 1 ticket."); return; }
-    alert("Demo checkout — connect your payment gateway (PayPal / bank / Alipay) here.");
+    if(wantInvoice && method!=="bank"){ alert("VAT invoices require Bank transfer. Please switch your payment method to Bank transfer."); return; }
+    alert("Demo checkout — connect your payment gateway (PayPal/Card / bank / Alipay) here.");
   });
 
   render();
