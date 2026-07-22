@@ -337,7 +337,7 @@
 
     <div class="note" id="invoiceBankNote">
       <svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-      <div class="nt"><b>VAT invoices require Bank transfer.</b> Please switch your payment method to <b>Bank transfer</b> above to complete this order with an invoice.</div>
+      <div class="nt"><b>Payment method set to Bank transfer</b> — VAT invoices are only available with Bank transfer.</div>
     </div>
 
     <div id="invoiceFields">
@@ -474,11 +474,16 @@
     document.getElementById("panelPaypal").classList.toggle("show",m==="paypal");
     document.getElementById("panelBank").classList.toggle("show",m==="bank");
     document.getElementById("panelAlipay").classList.toggle("show",m==="alipay");
-    updateInvoiceWarn();
+    if(m!=="bank" && wantInvoice) setInvoice(false);
   }
 
-  function updateInvoiceWarn(){
-    document.getElementById("invoiceBankNote").classList.toggle("show", wantInvoice && method!=="bank");
+  function setInvoice(on){
+    wantInvoice = on;
+    document.getElementById("wantInvoice").checked = on;
+    document.getElementById("invoiceFields").classList.toggle("show", on);
+    document.getElementById("invoiceBankNote").classList.toggle("show", on);
+    if(on && method!=="bank") setMethod("bank");
+    renderSummary();
   }
   document.querySelectorAll(".method").forEach(el=>{
     el.addEventListener("click",()=>setMethod(el.dataset.method));
@@ -502,10 +507,7 @@
   });
 
   document.getElementById("wantInvoice").addEventListener("change", e=>{
-    wantInvoice = e.target.checked;
-    document.getElementById("invoiceFields").classList.toggle("show", wantInvoice);
-    updateInvoiceWarn();
-    renderSummary();
+    setInvoice(e.target.checked);
   });
 
   document.getElementById("applyPromo").addEventListener("click", ()=>{
