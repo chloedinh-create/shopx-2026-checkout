@@ -143,7 +143,10 @@
   .trust svg{width:14px;height:14px;stroke:var(--success)}
 
   /* payment method */
-  .methods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+  .methods{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:10px}
+  .contact-note{text-align:center;color:var(--muted);font-size:12px;margin-bottom:16px}
+  .contact-note a{color:var(--violet);font-weight:500;text-decoration:none}
+  .contact-note a:hover{text-decoration:underline}
   .method{border:1px solid var(--field-br);border-radius:12px;padding:14px;cursor:pointer;
     display:flex;align-items:center;gap:8px;transition:border-color .15s,background .15s}
   .method:hover{border-color:rgba(166,77,255,.5)}
@@ -233,7 +236,7 @@
     <div id="tiers"></div>
   </div>
 
-  <!-- STEP 2: DISCOUNT APPLICATION (shown only when the Supported Ticket is selected) -->
+  <!-- STEP 2: DISCOUNT APPLICATION (shown only when the Sponsored Voucher is selected) -->
   <div class="card hidden" id="stepDiscountForm">
     <div class="step"><span class="n">2</span> APPLY FOR A DISCOUNT</div>
     <div class="field">
@@ -273,9 +276,6 @@
           <option>$1M+</option>
         </select></div>
     </div>
-    <div class="field"><label>Why do you want to join ShopX 2026? <span class="req">*</span></label>
-      <textarea placeholder="Tell us why you're excited to attend, your business goals, and why this discount would help you get there." required></textarea></div>
-
     <div class="field"><label>Which AI application are you most keen to explore at ShopX? <span class="req">*</span></label>
       <textarea placeholder="e.g. AI product photography, AI customer support, AI ad creative..." required></textarea></div>
 
@@ -322,12 +322,8 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M3 21h18M4 10h16M5 21V10M19 21V10M12 3l8 5H4z"/></svg>
         <span class="ml">Bank transfer</span>
       </div>
-      <div class="method" data-method="alipay">
-        <span class="radio"></span>
-        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M6 14c4 2 9 2 12-2M9 8h6"/></svg>
-        <span class="ml">Alipay</span>
-      </div>
     </div>
+    <div class="contact-note">Don't see a payment method that works for you? <a href="mailto:hello@gemcommerce.com">Contact us</a></div>
 
     <!-- PayPal -->
     <div class="panel show" id="panelPaypal">
@@ -364,22 +360,6 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
         <div class="nt"><b>Important:</b> please include <b>your registered email address</b> in the payment reference / transfer description so we can verify and match your registration with the payment.<br>
         <span style="color:var(--sub)">Example reference: <b style="color:#fff">SHOPX2026 name@company.com</b></span></div>
-      </div>
-    </div>
-
-    <!-- Alipay -->
-    <div class="panel" id="panelAlipay">
-      <div class="bank">
-        <div class="qr" id="qrAlipay"><span class="qr-ph">Alipay QR</span></div>
-        <div class="bank-info">
-          <div class="row"><span class="k">Merchant</span><span class="v">GemCommerce</span></div>
-          <div class="row"><span class="k">Amount</span><span class="v" id="alAmt">—</span></div>
-          <div style="color:var(--sub);font-size:13px;margin-top:10px">Open the Alipay app and scan the QR code to pay.</div>
-        </div>
-      </div>
-      <div class="note">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-        <div class="nt"><b>Important:</b> please include <b>your registered email address</b> in the payment note so we can match your registration with the payment.</div>
       </div>
     </div>
 
@@ -438,7 +418,7 @@
     { id:"standard", name:"Standard", desc:"Full-day summit access · Buildathon AI workflow",
       price:149, badge:"", qty:1 },
   ];
-  const DISCOUNT_TIER = { id:"discount", name:"Supported Ticket",
+  const DISCOUNT_TIER = { id:"discount", name:"Sponsored Voucher",
     desc:"For qualified merchants and agencies. Answer the questions & get the voucher in 24 hours." };
   const PROMOS = { "SHOPX10":0.10, "EARLYBIRD":1.00 };  // code : % off (0.10 = 10%)
 
@@ -448,9 +428,8 @@
     accountName:"GEMCOMMERCE CO., LTD",
     accountNo:"0123456789",
     // Leave empty -> QR is auto-generated from the transfer info + amount.
-    // To use your own bank/Alipay QR image, put the image URL/path below.
+    // To use your own bank QR image, put the image URL/path below.
     qrImage:"",
-    alipayQrImage:"",
     // PayPal: your PayPal.Me / checkout link. QR is auto-generated from this link.
     // To use a custom PayPal QR image instead, set paypalQrImage.
     paypalLink:"https://www.paypal.com/paypalme/gemcommerce",
@@ -541,7 +520,6 @@
     document.getElementById("bkOwner").textContent = PAYMENT.accountName;
     document.getElementById("bkNo").textContent = PAYMENT.accountNo;
     document.getElementById("bkAmt").textContent = total>0 ? fmt(total) : "—";
-    document.getElementById("alAmt").textContent = total>0 ? fmt(total) : "—";
     document.getElementById("ppAmt").textContent = total>0 ? fmt(total) : "—";
     const ppUrl = PAYMENT.paypalLink + (total>0 ? "/"+total.toFixed(2) : "");
     const ppLink = document.getElementById("ppLink");
@@ -550,9 +528,6 @@
     makeQR(document.getElementById("qrBox"),
       `Bank: ${PAYMENT.bankName} | Acc: ${PAYMENT.accountNo} | ${PAYMENT.accountName} | Amount: ${total.toFixed(2)} | Ref: SHOPX2026 <email>`,
       PAYMENT.qrImage);
-    makeQR(document.getElementById("qrAlipay"),
-      `Alipay | GemCommerce | Amount: ${total.toFixed(2)} | Ref: SHOPX2026 <email>`,
-      PAYMENT.alipayQrImage);
   }
 
   function setMethod(m){
@@ -560,7 +535,6 @@
     document.querySelectorAll(".method").forEach(el=>el.classList.toggle("on",el.dataset.method===m));
     document.getElementById("panelPaypal").classList.toggle("show",m==="paypal");
     document.getElementById("panelBank").classList.toggle("show",m==="bank");
-    document.getElementById("panelAlipay").classList.toggle("show",m==="alipay");
     if(m!=="bank" && wantInvoice) setInvoice(false);
   }
 
@@ -613,7 +587,7 @@
     const total = TICKETS.filter(t=>t.qty>0).reduce((s,t)=>s+t.price*t.qty,0);
     if(total<=0){ alert("Please select at least 1 ticket."); return; }
     if(wantInvoice && method!=="bank"){ alert("VAT invoices require Bank transfer. Please switch your payment method to Bank transfer."); return; }
-    alert("Demo checkout — connect your payment gateway (PayPal/Card / bank / Alipay) here.");
+    alert("Demo checkout — connect your payment gateway (PayPal/Card / bank transfer) here.");
   });
 
   document.getElementById("discountSubmitBtn").addEventListener("click", ()=>{
