@@ -92,6 +92,9 @@
   .tier-desc{color:var(--sub);font-size:12px;margin-top:2px}
   .tier-r{text-align:right;flex:none}
   .price{font-size:16px;font-weight:500}
+  .tier.special .price{color:var(--violet);font-size:14px}
+  .badge-v{font-size:11px;padding:2px 8px;border-radius:99px;margin-left:6px;
+    background:rgba(154,46,255,.18);color:var(--violet)}
   .stepper{display:inline-flex;align-items:center;gap:8px;margin-top:6px}
   .qtybtn{width:28px;height:28px;border-radius:8px;border:1px solid rgba(199,199,199,.3);
     background:transparent;color:var(--sub);font-size:16px;cursor:pointer;line-height:1}
@@ -188,6 +191,8 @@
   #invoiceBankNote{display:none;margin-top:0;margin-bottom:14px}
   #invoiceBankNote.show{display:flex}
 
+  .hidden{display:none}
+
   footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-size:12px;
     padding:24px var(--gutter) 40px}
 
@@ -228,8 +233,69 @@
     <div id="tiers"></div>
   </div>
 
+  <!-- STEP 2: DISCOUNT APPLICATION (shown only when the Discounted Ticket is selected) -->
+  <div class="card hidden" id="stepDiscountForm">
+    <div class="step"><span class="n">2</span> APPLY FOR A DISCOUNT</div>
+    <div class="field">
+      <label>Name <span class="req">*</span></label>
+      <input type="text" placeholder="Nguyen Van A" required>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Email <span class="req">*</span></label>
+        <input type="email" placeholder="name@company.com" required></div>
+      <div class="field"><label>Phone number <span class="req">*</span></label>
+        <input type="tel" placeholder="+84 ..." required></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Brand name <span class="req">*</span></label>
+        <input type="text" placeholder="Your brand" required></div>
+      <div class="field"><label>Website URL <span class="req">*</span></label>
+        <input type="url" placeholder="https://yourstore.com" required></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Role <span class="req">*</span></label>
+        <select required>
+          <option value="">Select</option>
+          <option>Founder / CEO</option>
+          <option>Marketing</option>
+          <option>Ecommerce / Growth</option>
+          <option>Operations</option>
+          <option>Other</option>
+        </select></div>
+      <div class="field"><label>Revenue <span class="req">*</span></label>
+        <select required>
+          <option value="">Select</option>
+          <option>Under $10k / month</option>
+          <option>$10k – $50k / month</option>
+          <option>$50k – $200k / month</option>
+          <option>$200k – $1M / month</option>
+          <option>$1M+ / month</option>
+        </select></div>
+    </div>
+    <div class="field"><label>How much discount are you interested in? <span class="req">*</span></label>
+      <select required>
+        <option value="">Select a range</option>
+        <option>Under 10%</option>
+        <option>10 – 20%</option>
+        <option>20 – 30%</option>
+        <option>30 – 40%</option>
+        <option>40%+</option>
+      </select></div>
+    <div class="field"><label>Make your case <span class="req">*</span></label>
+      <textarea placeholder="Tell us about your business and why this discount would make a difference for you." required></textarea></div>
+
+    <button class="pay" id="discountSubmitBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      <span>Submit application</span>
+    </button>
+    <div class="trust">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+      Our team will review your application and reach out within 2 business days
+    </div>
+  </div>
+
   <!-- STEP 2: DETAILS -->
-  <div class="card">
+  <div class="card" id="stepDetails">
     <div class="step"><span class="n">2</span> YOUR DETAILS</div>
     <div class="field">
       <label>Full name <span class="req">*</span></label>
@@ -246,7 +312,7 @@
   </div>
 
   <!-- STEP 3: PAYMENT -->
-  <div class="card">
+  <div class="card" id="stepPayment">
     <div class="step"><span class="n">3</span> PAYMENT</div>
 
     <label style="display:block;font-size:13px;font-weight:500;margin-bottom:8px">Payment method <span class="req">*</span></label>
@@ -377,6 +443,8 @@
     { id:"standard", name:"Standard", desc:"Full-day summit access · all keynotes",
       price:249, badge:"", qty:1 },
   ];
+  const DISCOUNT_TIER = { id:"discount", name:"Discounted Ticket",
+    desc:"Bootstrapped or growing brand? Tell us your story and propose your rate." };
   const PROMOS = { "SHOPX10":0.10, "EARLYBIRD":1.00 };  // code : % off (0.10 = 10%)
 
   // Payment details — replace with your real accounts:
@@ -397,11 +465,12 @@
 
   let discount = 0;
   let wantInvoice = false;
+  let discountMode = false;
   const fmt = n => CURRENCY + n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
 
   function renderTiers(){
-    document.getElementById("tiers").innerHTML = TICKETS.map(t=>`
-      <div class="tier ${t.qty>0?'on':''}" data-id="${t.id}">
+    const normal = TICKETS.map(t=>`
+      <div class="tier ${!discountMode && t.qty>0?'on':''}" data-id="${t.id}">
         <div class="tier-l">
           <span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7"/></svg></span>
           <div>
@@ -418,6 +487,32 @@
           </div>
         </div>
       </div>`).join("");
+    const special = `
+      <div class="tier special ${discountMode?'on':''}" data-id="${DISCOUNT_TIER.id}">
+        <div class="tier-l">
+          <span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7"/></svg></span>
+          <div>
+            <div class="tier-name">${DISCOUNT_TIER.name}<span class="badge-v">Custom rate</span></div>
+            <div class="tier-desc">${DISCOUNT_TIER.desc}</div>
+          </div>
+        </div>
+        <div class="tier-r"><div class="price">Apply now</div></div>
+      </div>`;
+    document.getElementById("tiers").innerHTML = normal + special;
+  }
+
+  function enterDiscountMode(){
+    discountMode = true;
+    document.getElementById("stepDetails").classList.add("hidden");
+    document.getElementById("stepPayment").classList.add("hidden");
+    document.getElementById("stepDiscountForm").classList.remove("hidden");
+    render();
+  }
+  function exitDiscountMode(){
+    discountMode = false;
+    document.getElementById("stepDetails").classList.remove("hidden");
+    document.getElementById("stepPayment").classList.remove("hidden");
+    document.getElementById("stepDiscountForm").classList.add("hidden");
   }
 
   function renderSummary(){
@@ -500,6 +595,11 @@
     }
     const tier = e.target.closest(".tier");
     if(tier && !e.target.closest(".stepper")){
+      if(tier.dataset.id===DISCOUNT_TIER.id){
+        enterDiscountMode();
+        return;
+      }
+      if(discountMode) exitDiscountMode();
       const t = TICKETS.find(x=>x.id===tier.dataset.id);
       if(t.qty===0) t.qty=1;
       render();
@@ -522,6 +622,10 @@
     if(total<=0){ alert("Please select at least 1 ticket."); return; }
     if(wantInvoice && method!=="bank"){ alert("VAT invoices require Bank transfer. Please switch your payment method to Bank transfer."); return; }
     alert("Demo checkout — connect your payment gateway (PayPal/Card / bank / Alipay) here.");
+  });
+
+  document.getElementById("discountSubmitBtn").addEventListener("click", ()=>{
+    alert("Demo application — connect this form to your CRM/spreadsheet backend here.");
   });
 
   render();
