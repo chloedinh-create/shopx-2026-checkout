@@ -281,8 +281,8 @@
         <option>30 – 40%</option>
         <option>40%+</option>
       </select></div>
-    <div class="field"><label>Make your case <span class="req">*</span></label>
-      <textarea placeholder="Tell us about your business and why this discount would make a difference for you." required></textarea></div>
+    <div class="field"><label>Why do you want to join ShopX 2026? <span class="req">*</span></label>
+      <textarea placeholder="Tell us why you're excited to attend, your business goals, and why this discount would help you get there." required></textarea></div>
 
     <button class="pay" id="discountSubmitBtn" type="button">
       <svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
@@ -396,8 +396,8 @@
     <label class="invoice-toggle">
       <input type="checkbox" id="wantInvoice">
       <span>
-        <span class="t">Request VAT invoice (+8%)</span>
-        <span class="d">Available for Bank transfer only. 8% VAT will be added to the total.</span>
+        <span class="t">Request VAT invoice</span>
+        <span class="d">Available for Bank transfer only. Ticket price already includes 8% VAT — no extra charge.</span>
       </span>
     </label>
 
@@ -440,8 +440,8 @@
   const CURRENCY = "$";
   const VAT_RATE = 0.08;            // 8% — change, or set 0 to disable VAT
   const TICKETS = [
-    { id:"standard", name:"Standard", desc:"Full-day summit access · all keynotes",
-      price:249, badge:"", qty:1 },
+    { id:"standard", name:"Standard", desc:"Full-day summit access · all keynotes · VAT included",
+      price:149, badge:"", qty:1 },
   ];
   const DISCOUNT_TIER = { id:"discount", name:"Discounted Ticket",
     desc:"Bootstrapped or growing brand? Tell us your story and propose your rate." };
@@ -519,16 +519,15 @@
     const lines = TICKETS.filter(t=>t.qty>0);
     const subtotal = lines.reduce((s,t)=>s+t.price*t.qty,0);
     const disc = +(subtotal*discount).toFixed(2);
-    const vatRate = wantInvoice ? VAT_RATE : 0;
-    const vat = +((subtotal-disc)*vatRate).toFixed(2);
-    const total = +(subtotal-disc+vat).toFixed(2);
+    const total = +(subtotal-disc).toFixed(2);
+    const vatIncluded = +(total*VAT_RATE/(1+VAT_RATE)).toFixed(2);
     let html = "";
     if(lines.length===0){
       html = `<div class="empty">Select at least 1 ticket to continue</div>`;
     } else {
       html = lines.map(t=>`<div class="sum-row"><span>${t.name} × ${t.qty}</span><span>${fmt(t.price*t.qty)}</span></div>`).join("");
       if(disc>0) html += `<div class="sum-row" style="color:var(--success)"><span>Discount</span><span>-${fmt(disc)}</span></div>`;
-      if(wantInvoice) html += `<div class="sum-row"><span>VAT (${Math.round(VAT_RATE*100)}%)</span><span>${fmt(vat)}</span></div>`;
+      if(wantInvoice) html += `<div class="sum-row"><span>VAT (${Math.round(VAT_RATE*100)}%, included)</span><span>${fmt(vatIncluded)}</span></div>`;
       html += `<div class="sum-row total"><span>Total</span><span>${fmt(total)}</span></div>`;
     }
     document.getElementById("summary").innerHTML = html;
