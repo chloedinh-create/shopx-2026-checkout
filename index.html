@@ -272,14 +272,6 @@
           <option>$1M+</option>
         </select></div>
     </div>
-    <div class="field"><label>How much discount are you interested in? <span class="req">*</span></label>
-      <select required>
-        <option value="">Select</option>
-        <option>20%</option>
-        <option>50%</option>
-        <option>70%</option>
-        <option>100%</option>
-      </select></div>
     <div class="field"><label>Why do you want to join ShopX 2026? <span class="req">*</span></label>
       <textarea placeholder="Tell us why you're excited to attend, your business goals, and why this discount would help you get there." required></textarea></div>
 
@@ -439,7 +431,7 @@
   const CURRENCY = "$";
   const VAT_RATE = 0.08;            // 8% — change, or set 0 to disable VAT
   const TICKETS = [
-    { id:"standard", name:"Standard", desc:"Full-day summit access · all keynotes · VAT included",
+    { id:"standard", name:"Standard", desc:"Keynotes & panels, buildathon and Canton Fair access · VAT included",
       price:149, badge:"", qty:1 },
   ];
   const DISCOUNT_TIER = { id:"discount", name:"Supported Ticket",
