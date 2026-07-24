@@ -233,7 +233,7 @@
     <div id="tiers"></div>
   </div>
 
-  <!-- STEP 2: DISCOUNT APPLICATION (shown only when the Discounted Ticket is selected) -->
+  <!-- STEP 2: DISCOUNT APPLICATION (shown only when the Supported Ticket is selected) -->
   <div class="card hidden" id="stepDiscountForm">
     <div class="step"><span class="n">2</span> APPLY FOR A DISCOUNT</div>
     <div class="field">
@@ -256,20 +256,20 @@
       <div class="field"><label>Role <span class="req">*</span></label>
         <select required>
           <option value="">Select</option>
-          <option>Founder / CEO</option>
-          <option>Marketing</option>
-          <option>Ecommerce / Growth</option>
-          <option>Operations</option>
-          <option>Other</option>
+          <option>Founder/CEO/Owner</option>
+          <option>Head/Manager</option>
+          <option>Lead</option>
+          <option>Executive/Staff</option>
+          <option>Others</option>
         </select></div>
-      <div class="field"><label>Revenue <span class="req">*</span></label>
+      <div class="field"><label>Revenue/month <span class="req">*</span></label>
         <select required>
           <option value="">Select</option>
-          <option>Under $10k / month</option>
-          <option>$10k – $50k / month</option>
-          <option>$50k – $200k / month</option>
-          <option>$200k – $1M / month</option>
-          <option>$1M+ / month</option>
+          <option>Under $10k</option>
+          <option>$10k – $50k</option>
+          <option>$50k – $200k</option>
+          <option>$200k – $1M</option>
+          <option>$1M+</option>
         </select></div>
     </div>
     <div class="field"><label>How much discount are you interested in? <span class="req">*</span></label>
@@ -442,7 +442,7 @@
     { id:"standard", name:"Standard", desc:"Full-day summit access · all keynotes · VAT included",
       price:149, badge:"", qty:1 },
   ];
-  const DISCOUNT_TIER = { id:"discount", name:"Discounted Ticket",
+  const DISCOUNT_TIER = { id:"discount", name:"Supported Ticket",
     desc:"Bootstrapped or growing brand? Tell us your story and propose your rate." };
   const PROMOS = { "SHOPX10":0.10, "EARLYBIRD":1.00 };  // code : % off (0.10 = 10%)
 
@@ -495,7 +495,6 @@
             <div class="tier-desc">${DISCOUNT_TIER.desc}</div>
           </div>
         </div>
-        <div class="tier-r"><div class="price">Apply now</div></div>
       </div>`;
     document.getElementById("tiers").innerHTML = normal + special;
   }
