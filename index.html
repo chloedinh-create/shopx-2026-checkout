@@ -246,15 +246,17 @@
     <div class="grid2">
       <div class="field"><label>Email <span class="req">*</span></label>
         <input type="email" placeholder="Your email" required></div>
-      <div class="field"><label>Phone number <span class="req">*</span></label>
+      <div class="field"><label>Phone Number <span class="req">*</span></label>
         <input type="tel" placeholder="Your phone number" required></div>
     </div>
     <div class="grid2">
-      <div class="field"><label>Brand name <span class="req">*</span></label>
+      <div class="field"><label>Brand Name <span class="req">*</span></label>
         <input type="text" placeholder="Your brand name" required></div>
-      <div class="field"><label>Website URL <span class="req">*</span></label>
-        <input type="url" placeholder="Your website URL" required>
-        <div style="font-style:italic;color:var(--muted);font-size:11px;margin-top:5px">Valid store or live website only</div></div>
+      <div class="field"><label style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+          <span>Website URL <span class="req">*</span></span>
+          <span style="font-style:italic;font-weight:400;color:var(--muted);font-size:11px">Valid store or live website only</span>
+        </label>
+        <input type="url" placeholder="Your website URL" required></div>
     </div>
     <div class="grid2">
       <div class="field"><label>Role <span class="req">*</span></label>
@@ -266,7 +268,7 @@
           <option>Executive/Staff</option>
           <option>Others</option>
         </select></div>
-      <div class="field"><label>Revenue/month <span class="req">*</span></label>
+      <div class="field"><label>Revenue/Month <span class="req">*</span></label>
         <select required>
           <option value="">Select</option>
           <option>Under $10k</option>
@@ -293,7 +295,7 @@
   <div class="card" id="stepDetails">
     <div class="step"><span class="n">2</span> YOUR DETAILS</div>
     <div class="field">
-      <label>Full name <span class="req">*</span></label>
+      <label>Full Name <span class="req">*</span></label>
       <input type="text" placeholder="Your name" required>
     </div>
     <div class="grid2">
@@ -310,7 +312,7 @@
   <div class="card" id="stepPayment">
     <div class="step"><span class="n">3</span> PAYMENT</div>
 
-    <label style="display:block;font-size:13px;font-weight:500;margin-bottom:8px">Payment method <span class="req">*</span></label>
+    <label style="display:block;font-size:13px;font-weight:500;margin-bottom:8px">Payment Method <span class="req">*</span></label>
     <div class="methods">
       <div class="method on" data-method="paypal">
         <span class="radio"></span>
@@ -371,7 +373,7 @@
     <label class="invoice-toggle">
       <input type="checkbox" id="wantInvoice">
       <span>
-        <span class="t">Request VAT invoice</span>
+        <span class="t">Request VAT Invoice</span>
         <span class="d">Available for Bank transfer only. Ticket price already includes 8% VAT — no extra charge.</span>
       </span>
     </label>
@@ -382,15 +384,15 @@
     </div>
 
     <div id="invoiceFields">
-      <div class="field"><label>Company name <span class="req">*</span></label>
+      <div class="field"><label>Company Name <span class="req">*</span></label>
         <input type="text" placeholder="Legal name on the invoice"></div>
       <div class="grid2">
-        <div class="field"><label>Tax code <span class="req">*</span></label>
+        <div class="field"><label>Tax Code <span class="req">*</span></label>
           <input type="text" inputmode="numeric" placeholder="Tax identification number"></div>
-        <div class="field"><label>Invoice email</label>
+        <div class="field"><label>Invoice Email</label>
           <input type="email" placeholder="billing@company.com"></div>
       </div>
-      <div class="field"><label>Company address <span class="req">*</span></label>
+      <div class="field"><label>Company Address <span class="req">*</span></label>
         <input type="text" placeholder="Street, district, city / province"></div>
     </div>
 
@@ -415,7 +417,7 @@
   const CURRENCY = "$";
   const VAT_RATE = 0.08;            // 8% — change, or set 0 to disable VAT
   const TICKETS = [
-    { id:"standard", name:"Standard", desc:"Full-day summit access · Buildathon AI workflow",
+    { id:"standard", name:"Standard", desc:"Full-Day Summit Access · Buildathon · Canton Fair",
       price:149, badge:"", qty:1 },
   ];
   const DISCOUNT_TIER = { id:"discount", name:"Sponsored Voucher",
