@@ -519,15 +519,14 @@
     const subtotal = lines.reduce((s,t)=>s+t.price*t.qty,0);
     const disc = +(subtotal*discount).toFixed(2);
     const total = +(subtotal-disc).toFixed(2);
-    const vatIncluded = +(total*VAT_RATE/(1+VAT_RATE)).toFixed(2);
     let html = "";
     if(lines.length===0){
       html = `<div class="empty">Select at least 1 ticket to continue</div>`;
     } else {
       html = lines.map(t=>`<div class="sum-row"><span>${t.name} × ${t.qty}</span><span>${fmt(t.price*t.qty)}</span></div>`).join("");
       if(disc>0) html += `<div class="sum-row" style="color:var(--success)"><span>Discount</span><span>-${fmt(disc)}</span></div>`;
-      if(wantInvoice) html += `<div class="sum-row"><span>VAT (${Math.round(VAT_RATE*100)}%, included)</span><span>${fmt(vatIncluded)}</span></div>`;
       html += `<div class="sum-row total"><span>Total</span><span>${fmt(total)}</span></div>`;
+      if(wantInvoice) html += `<div style="color:var(--muted);font-size:12px;margin-top:6px">Price includes ${Math.round(VAT_RATE*100)}% VAT</div>`;
     }
     document.getElementById("summary").innerHTML = html;
     document.getElementById("payLabel").textContent = total>0 ? `Pay ${fmt(total)}` : "Pay";
