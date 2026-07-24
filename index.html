@@ -237,20 +237,21 @@
   <div class="card hidden" id="stepDiscountForm">
     <div class="step"><span class="n">2</span> APPLY FOR A DISCOUNT</div>
     <div class="field">
-      <label>Name <span class="req">*</span></label>
-      <input type="text" placeholder="Nguyen Van A" required>
+      <label>Full Name <span class="req">*</span></label>
+      <input type="text" placeholder="Your name" required>
     </div>
     <div class="grid2">
       <div class="field"><label>Email <span class="req">*</span></label>
-        <input type="email" placeholder="name@company.com" required></div>
+        <input type="email" placeholder="Your email" required></div>
       <div class="field"><label>Phone number <span class="req">*</span></label>
-        <input type="tel" placeholder="+84 ..." required></div>
+        <input type="tel" placeholder="Your phone number" required></div>
     </div>
     <div class="grid2">
       <div class="field"><label>Brand name <span class="req">*</span></label>
-        <input type="text" placeholder="Your brand" required></div>
+        <input type="text" placeholder="Your brand name" required></div>
       <div class="field"><label>Website URL <span class="req">*</span></label>
-        <input type="url" placeholder="https://yourstore.com" required></div>
+        <input type="url" placeholder="Your website URL" required>
+        <div style="font-style:italic;color:var(--muted);font-size:11px;margin-top:5px">Valid store or live website only</div></div>
     </div>
     <div class="grid2">
       <div class="field"><label>Role <span class="req">*</span></label>
@@ -290,16 +291,16 @@
     <div class="step"><span class="n">2</span> YOUR DETAILS</div>
     <div class="field">
       <label>Full name <span class="req">*</span></label>
-      <input type="text" placeholder="Nguyen Van A" required>
+      <input type="text" placeholder="Your name" required>
     </div>
     <div class="grid2">
       <div class="field"><label>Email <span class="req">*</span></label>
-        <input type="email" placeholder="name@company.com" required></div>
+        <input type="email" placeholder="Your email" required></div>
       <div class="field"><label>Phone <span class="req">*</span></label>
-        <input type="tel" placeholder="+84 ..." required></div>
+        <input type="tel" placeholder="Your phone number" required></div>
     </div>
     <div class="field"><label>Website / Store URL</label>
-      <input type="url" placeholder="https://yourstore.com"></div>
+      <input type="url" placeholder="Your website URL"></div>
   </div>
 
   <!-- STEP 3: PAYMENT -->
@@ -431,11 +432,11 @@
   const CURRENCY = "$";
   const VAT_RATE = 0.08;            // 8% — change, or set 0 to disable VAT
   const TICKETS = [
-    { id:"standard", name:"Standard", desc:"Keynotes & panels, buildathon and Canton Fair access · VAT included",
+    { id:"standard", name:"Standard", desc:"Full-day summit access · Buildathon AI workflow",
       price:149, badge:"", qty:1 },
   ];
   const DISCOUNT_TIER = { id:"discount", name:"Supported Ticket",
-    desc:"Bootstrapped or growing brand? Tell us your story and propose your rate." };
+    desc:"For qualified merchants and agencies. Answer the questions & get the voucher in 24 hours." };
   const PROMOS = { "SHOPX10":0.10, "EARLYBIRD":1.00 };  // code : % off (0.10 = 10%)
 
   // Payment details — replace with your real accounts:
@@ -483,7 +484,7 @@
         <div class="tier-l">
           <span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7"/></svg></span>
           <div>
-            <div class="tier-name">${DISCOUNT_TIER.name}<span class="badge-v">Custom rate</span></div>
+            <div class="tier-name">${DISCOUNT_TIER.name}<span class="badge-v">Upto 100%</span></div>
             <div class="tier-desc">${DISCOUNT_TIER.desc}</div>
           </div>
         </div>
